@@ -6,41 +6,32 @@
     <style>
         :root { --sidebar-width: 280px; --primary-color: #4e54c8; --secondary-bg: #f4f6f9; --code-bg: #1e1e1e; }
         body { overflow-x: hidden; background-color: var(--secondary-bg); font-family: 'Poppins', sans-serif; }
-        
         #wrapper { display: flex; width: 100%; height: 100vh; overflow: hidden; }
-        
         #sidebar-wrapper {
             min-height: 100vh; width: var(--sidebar-width); margin-left: calc(var(--sidebar-width) * -1);
             background: #ffffff; border-right: 1px solid #eaeaea; transition: margin 0.3s ease-in-out;
             position: fixed; z-index: 1000; display: flex; flex-direction: column; box-shadow: 4px 0 15px rgba(0,0,0,0.05);
         }
-        
         .sidebar-heading { padding: 1.5rem; font-size: 1.25rem; font-weight: 800; color: var(--primary-color); display: flex; justify-content: space-between; align-items: center; letter-spacing: 1px; }
         .list-group-item { border: none; padding: 1rem 1.5rem; font-weight: 500; color: #6c757d; transition: all 0.2s; border-left: 4px solid transparent; }
         .list-group-item:hover, .list-group-item.active { color: var(--primary-color); background-color: #f8f9fa; border-left-color: var(--primary-color); }
         .list-group-item.active { background-color: #eef2ff; }
         .sidebar-footer { margin-top: auto; padding: 1.5rem; }
-        
         #page-content-wrapper { width: 100%; overflow-y: auto; transition: margin 0.3s ease-in-out; }
         #wrapper.toggled #sidebar-wrapper { margin-left: 0; }
-        
         @media (min-width: 768px) {
             #sidebar-wrapper { margin-left: 0; position: relative; }
             #page-content-wrapper { min-width: 0; width: 100%; }
             #wrapper.toggled #sidebar-wrapper { margin-left: calc(var(--sidebar-width) * -1); }
         }
-        
         .sidebar-backdrop { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 900; }
         #wrapper.toggled .sidebar-backdrop { display: block; }
         @media (min-width: 768px) { #wrapper.toggled .sidebar-backdrop { display: none; } }
-
         .card-session { border: none; border-radius: 16px; background: white; box-shadow: 0 5px 20px rgba(0,0,0,0.03); transition: transform 0.2s; position: relative; overflow: hidden; }
         .card-session:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
-        
         .status-indicator { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 5px; }
         .status-connected { background-color: #198754; box-shadow: 0 0 10px rgba(25, 135, 84, 0.5); }
         .status-connecting { background-color: #ffc107; box-shadow: 0 0 10px rgba(255, 193, 7, 0.5); }
-
         .btn-action { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border-radius: 10px; border: none; transition: 0.2s; margin-left: 5px; }
         .btn-settings { background: #f1f3f5; color: #495057; }
         .btn-settings:hover { background: var(--primary-color); color: white; }
@@ -48,26 +39,14 @@
         .btn-code:hover { background: #007bff; color: white; }
         .btn-delete { background: #fff5f5; color: #dc3545; }
         .btn-delete:hover { background: #dc3545; color: white; }
-
-        .code-editor {
-            background-color: var(--code-bg);
-            color: #d4d4d4;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 14px;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 15px;
-            width: 100%;
-            height: 300px;
-            resize: vertical;
-            line-height: 1.5;
-        }
+        .btn-broadcast { background: #e6f9f1; color: #198754; } 
+        .btn-broadcast:hover { background: #198754; color: white; }
+        .code-editor { background-color: var(--code-bg); color: #d4d4d4; font-family: 'Consolas', 'Monaco', monospace; font-size: 14px; border: 1px solid #333; border-radius: 8px; padding: 15px; width: 100%; height: 300px; resize: vertical; line-height: 1.5; }
         .code-editor:focus { outline: 2px solid var(--primary-color); border-color: transparent; }
     </style>
 </head>
 
 <body>
-
     <div id="wrapper">
         <div class="sidebar-backdrop" id="backdrop"></div>
         <div id="sidebar-wrapper">
@@ -75,14 +54,12 @@
                 <span><i class="fas fa-robot me-2"></i>FIONA</span>
                 <button class="btn btn-link text-danger d-md-none text-decoration-none" id="sidebar-close"><i class="fas fa-times fa-lg"></i></button>
             </div>
-
             <div class="list-group list-group-flush">
                 <a href="/dashboard" class="list-group-item list-group-item-action active"><i class="fas fa-tachometer-alt me-3"></i>Dashboard</a>
                 <a href="/profile" class="list-group-item list-group-item-action"><i class="fas fa-user me-3"></i>Profile</a>
                 <a href="/settings" class="list-group-item list-group-item-action"><i class="fas fa-cog me-3"></i>Settings</a>
                 <a href="https://t.me/maverick_dar" target="_blank" class="list-group-item list-group-item-action"><i class="fas fa-headset me-3"></i>Support</a>
             </div>
-
             <div class="sidebar-footer">
                 <a href="/logout" class="btn btn-outline-danger w-100 rounded-pill"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
             </div>
@@ -92,14 +69,11 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top px-4 py-3 shadow-sm">
                 <div class="d-flex align-items-center w-100">
                     <button class="btn btn-light border shadow-sm me-3" id="menu-toggle"><i class="fas fa-bars"></i></button>
-
                     <h5 class="mb-0 fw-bold text-secondary d-none d-md-block">Control Panel</h5>
-
                     <div class="ms-auto d-flex align-items-center">
                         <button class="btn btn-warning text-white rounded-pill px-3 me-3 shadow-sm fw-bold" data-bs-toggle="modal" data-bs-target="#donateModal">
                             <i class="fas fa-donate me-2"></i>Donasi
                         </button>
-
                         <div class="text-end me-3 d-none d-sm-block">
                             <span class="d-block fw-bold text-dark"><%= user.username %></span>
                             <% if(user.isPremium) { %>
@@ -114,18 +88,18 @@
             </nav>
 
             <div class="container-fluid p-4">
-                
+                <% if (locals.success) { %><div class="alert alert-success alert-dismissible fade show" role="alert"><%= success %><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div><% } %>
+                <% if (locals.error) { %><div class="alert alert-danger alert-dismissible fade show" role="alert"><%= error %><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div><% } %>
+
                 <% if (!user.isPremium) { %>
                 <div class="card border-0 bg-primary bg-gradient text-white shadow-sm rounded-4 mb-4">
                     <div class="card-body p-4 d-flex flex-column flex-md-row justify-content-between align-items-center">
                         <div class="mb-3 mb-md-0">
                             <h4 class="fw-bold"><i class="fas fa-rocket me-2"></i>Upgrade Premium</h4>
-                            <p class="mb-0 opacity-75">Buka akses 10 Sesi Bot & Fitur Inject Code hanya <strong>Rp 5.000</strong>.</p>
+                            <p class="mb-0 opacity-75">Buka akses 10 Sesi Bot & Fitur lainnya hanya <strong>Rp 5.000</strong>.</p>
                         </div>
                         <form action="/payment/upgrade" method="POST">
-                            <button type="submit" class="btn btn-light text-primary fw-bold rounded-pill px-4 shadow py-2">
-                                Upgrade Sekarang
-                            </button>
+                            <button type="submit" class="btn btn-light text-primary fw-bold rounded-pill px-4 shadow py-2">Upgrade Sekarang</button>
                         </form>
                     </div>
                 </div>
@@ -154,38 +128,34 @@
                             <h5 class="fw-bold text-muted">Belum ada bot terhubung</h5>
                         </div>
                     <% } %>
-
                     <% user.sessions.forEach(sess => { %>
                         <div class="col-md-6 col-xl-4" id="sess-<%= sess.sessionId %>">
                             <div class="card card-session h-100">
                                 <div class="card-body p-4">
-                                    <div class="d-flex justify-content-between align-items-start mb-4">
-                                        <div class="d-flex align-items-center">
-                                            <div class="bg-light p-3 rounded-circle me-3 text-success shadow-sm">
-                                                <i class="fab fa-whatsapp fa-2x"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="fw-bold mb-0 text-dark"><%= sess.phoneNumber || 'Menunggu...' %></h6>
-                                                <span class="badge bg-light text-dark border mt-1">
-                                                    <span class="status-indicator <%= sess.status == 'connected' ? 'status-connected' : 'status-connecting' %>"></span>
-                                                    <%= sess.status %>
-                                                </span>
-                                            </div>
+                                    <div class="d-flex align-items-center mb-4">
+                                        <div class="bg-light p-3 rounded-circle me-3 text-success shadow-sm">
+                                            <i class="fab fa-whatsapp fa-2x"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-bold mb-0 text-dark"><%= sess.phoneNumber ? sess.phoneNumber.split('@')[0] : 'Menunggu...' %></h6>
+                                            <span class="badge bg-light text-dark border mt-1">
+                                                <span class="status-indicator <%= sess.status == 'connected' ? 'status-connected' : 'status-connecting' %>"></span>
+                                                <%= sess.status %>
+                                            </span>
                                         </div>
                                     </div>
-
                                     <div class="d-flex justify-content-between align-items-center pt-3 border-top">
                                         <small class="text-muted fw-bold">ID: <%= sess.sessionId.substring(0,6) %>...</small>
                                         <div class="d-flex">
-                                            <!-- Tombol Inject Code -->
+                                            <button class="btn btn-action btn-broadcast shadow-sm" data-bs-toggle="modal" data-bs-target="#jpmModal" data-session-id="<%= sess.sessionId %>" title="Broadcast JPM">
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
                                             <button class="btn btn-action btn-code shadow-sm" data-bs-toggle="modal" data-bs-target="#codeModal-<%= sess.sessionId %>" title="Inject Custom Code">
                                                 <i class="fas fa-code"></i>
                                             </button>
-                                            <!-- Tombol Config -->
                                             <button class="btn btn-action btn-settings shadow-sm" data-bs-toggle="modal" data-bs-target="#configModal-<%= sess.sessionId %>" title="Pengaturan">
                                                 <i class="fas fa-cog"></i>
                                             </button>
-                                            <!-- Tombol Hapus -->
                                             <button class="btn btn-action btn-delete shadow-sm" onclick="deleteSession('<%= user._id %>', '<%= sess.sessionId %>')" title="Hapus Bot">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
@@ -195,7 +165,6 @@
                             </div>
                         </div>
 
-                        <!-- MODAL INJECT CODE -->
                         <div class="modal fade" id="codeModal-<%= sess.sessionId %>" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered modal-lg">
                                 <div class="modal-content border-0 shadow-lg rounded-4">
@@ -207,30 +176,20 @@
                                         <input type="hidden" name="sessionId" value="<%= sess.sessionId %>">
                                         <div class="modal-body bg-dark p-0">
                                             <div class="p-3 border-bottom border-secondary">
-                                                <small class="text-secondary d-block mb-2">
-                                                    <i class="fas fa-info-circle me-1"></i> Tulis case JavaScript Anda di sini. Kode akan dieksekusi saat command dipanggil.
-                                                </small>
-                                                <div class="d-flex gap-2">
-                                                    <span class="badge bg-secondary font-monospace">m.reply('text')</span>
-                                                    <span class="badge bg-secondary font-monospace">fio.sendMessage(...)</span>
-                                                </div>
+                                                <small class="text-secondary d-block mb-2"><i class="fas fa-info-circle me-1"></i> Tulis case JavaScript Anda di sini. Kode akan dieksekusi saat command dipanggil.</small>
+                                                <div class="d-flex gap-2"><span class="badge bg-secondary font-monospace">m.reply('text')</span><span class="badge bg-secondary font-monospace">fio.sendMessage(...)</span></div>
                                             </div>
-                                            <div class="p-3">
-                                                <textarea name="customCode" class="code-editor" placeholder="case 'fiturbaru':&#10;  m.reply('Halo, ini fitur custom!');&#10;  break;" spellcheck="false"><%= sess.customCode || '' %></textarea>
-                                            </div>
+                                            <div class="p-3"><textarea name="customCode" class="code-editor" placeholder="case 'fiturbaru':&#10;  m.reply('Halo, ini fitur custom!');&#10;  break;" spellcheck="false"><%= sess.customCode || '' %></textarea></div>
                                         </div>
                                         <div class="modal-footer bg-dark border-top border-secondary">
                                             <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Batal</button>
-                                            <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold">
-                                                <i class="fas fa-save me-2"></i>Simpan & Inject
-                                            </button>
+                                            <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold"><i class="fas fa-save me-2"></i>Simpan & Inject</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- MODAL CONFIG -->
                         <div class="modal fade" id="configModal-<%= sess.sessionId %>" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content border-0 shadow rounded-4">
@@ -244,13 +203,11 @@
                                             <div class="row g-3">
                                                 <div class="col-12"><label class="fw-bold small text-muted">Nama Bot</label><input type="text" name="botname" class="form-control" value="<%= sess.config?.botname %>"></div>
                                                 <div class="col-6"><label class="fw-bold small text-muted">Owner</label><input type="number" name="owner" class="form-control" value="<%= sess.config?.owner %>"></div>
-                                                <div class="col-6"><label class="fw-bold small text-muted">Jeda (ms)</label><input type="number" name="jedaPushkontak" class="form-control" value="<%= sess.config?.jedaPushkontak %>"></div>
+                                                <div class="col-6"><label class="fw-bold small text-muted">Jeda JPM (ms)</label><input type="number" name="jedaJpm" class="form-control" value="<%= sess.config?.jedaJpm %>"></div>
                                                 <div class="col-12"><label class="fw-bold small text-muted">Link Telegram</label><input type="text" name="telegram" class="form-control" value="<%= sess.config?.telegram %>"></div>
                                             </div>
                                         </div>
-                                        <div class="modal-footer border-0">
-                                            <button type="submit" class="btn btn-primary rounded-pill w-100 fw-bold">Simpan Pengaturan</button>
-                                        </div>
+                                        <div class="modal-footer border-0"><button type="submit" class="btn btn-primary rounded-pill w-100 fw-bold">Simpan Pengaturan</button></div>
                                     </form>
                                 </div>
                             </div>
@@ -261,7 +218,6 @@
         </div>
     </div>
 
-    <!-- MODAL DONASI -->
     <div class="modal fade" id="donateModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg rounded-4">
@@ -271,21 +227,16 @@
                 </div>
                 <form action="/payment/donate" method="POST">
                     <div class="modal-body p-4">
-                        <div class="alert alert-warning border-0 rounded-3 small">
-                            <i class="fas fa-info-circle me-1"></i> Biaya admin Rp 400 per transaksi.
-                        </div>
+                        <div class="alert alert-warning border-0 rounded-3 small"><i class="fas fa-info-circle me-1"></i> Biaya admin Rp 400 per transaksi.</div>
                         <label class="fw-bold small text-muted">Nominal (IDR)</label>
                         <input type="number" name="amount" class="form-control form-control-lg fw-bold" placeholder="10000" min="1000" required>
                     </div>
-                    <div class="modal-footer border-0 px-4 pb-4 pt-0">
-                        <button type="submit" class="btn btn-warning w-100 rounded-pill text-white fw-bold">Bayar Sekarang</button>
-                    </div>
+                    <div class="modal-footer border-0 px-4 pb-4 pt-0"><button type="submit" class="btn btn-warning w-100 rounded-pill text-white fw-bold">Bayar Sekarang</button></div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- MODAL ADD BOT -->
     <div class="modal fade" id="addBotModal" tabindex="-1" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg rounded-4">
@@ -295,16 +246,40 @@
                 </div>
                 <div class="modal-body p-4 text-center">
                     <input type="number" id="phoneInput" class="form-control form-control-lg text-center fw-bold mb-3 rounded-3" placeholder="628xxxxxxxx">
-                    <button class="btn btn-success w-100 btn-lg rounded-pill fw-bold" onclick="requestPairing()">
-                        <i class="fas fa-qrcode me-2"></i>Dapatkan Kode
-                    </button>
+                    <button class="btn btn-success w-100 btn-lg rounded-pill fw-bold" onclick="requestPairing()"><i class="fas fa-qrcode me-2"></i>Dapatkan Kode</button>
                 </div>
             </div>
         </div>
     </div>
 
-<%- include('partials/footer') %>
+    <div class="modal fade" id="jpmModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">Kirim JPM (Broadcast)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="/broadcast/jpm" method="POST" enctype="multipart/form-data">
+                    <div class="modal-body p-4">
+                        <input type="hidden" name="sessionId" id="jpmSessionId">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-muted">Teks Pesan</label>
+                            <textarea name="text" class="form-control" rows="4" placeholder="Tulis pesan Anda di sini..." required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-muted">Gambar (Opsional)</label>
+                            <input type="file" name="image" class="form-control" accept="image/*">
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="submit" class="btn btn-primary rounded-pill w-100 fw-bold">Kirim ke Semua Kontak</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
+<%- include('partials/footer') %>
 <script>
     const wrapper = document.getElementById("wrapper");
     const menuToggle = document.getElementById("menu-toggle");
@@ -320,6 +295,16 @@
     if(backdrop) backdrop.addEventListener("click", closeSidebar);
     sidebarLinks.forEach(link => link.addEventListener('click', closeSidebar));
 
+    const jpmModal = document.getElementById('jpmModal');
+    if (jpmModal) {
+        jpmModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const sessionId = button.getAttribute('data-session-id');
+            const modalSessionIdInput = jpmModal.querySelector('#jpmSessionId');
+            modalSessionIdInput.value = sessionId;
+        });
+    }
+
     const socket = io();
     const userId = '<%= user._id %>';
     const addBotModal = new bootstrap.Modal(document.getElementById('addBotModal'));
@@ -328,15 +313,18 @@
         const phone = document.getElementById('phoneInput').value;
         if (!phone) return Swal.fire('Error', 'Masukkan Nomor HP!', 'error');
         socket.emit('create-session', { userId, phoneNumber: phone });
-        Swal.fire({ title: 'Processing...', didOpen: () => Swal.showLoading() });
+        Swal.fire({ title: 'Processing...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
     }
 
     socket.on('pairing-code', (data) => {
         addBotModal.hide();
         Swal.fire({
             title: 'KODE PAIRING',
-            html: `<div class="bg-light p-3 rounded mb-2"><h1 class="text-success fw-bold display-3 m-0" style="letter-spacing:5px">${data.code}</h1></div><p class="text-muted">Masukkan kode ini di WhatsApp Anda</p>`
-        }).then(() => location.reload());
+            html: `<div class="bg-light p-3 rounded mb-2"><h1 class="text-success fw-bold display-3 m-0" style="letter-spacing:5px">${data.code}</h1></div><p class="text-muted">Masukkan kode ini di perangkat WhatsApp Anda.</p>`,
+            allowOutsideClick: false
+        }).then(() => {
+            setTimeout(() => location.reload(), 2000);
+        });
     });
 
     socket.on('error', (msg) => Swal.fire('Gagal!', msg, 'warning'));
@@ -344,7 +332,13 @@
 
     function deleteSession(uid, sid) {
         Swal.fire({
-            title: 'Hapus Bot?', text: "Sesi akan terputus permanen.", icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya, Hapus', confirmButtonColor: '#d33'
+            title: 'Hapus Bot?',
+            text: "Sesi akan terputus permanen.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Hapus',
+            confirmButtonColor: '#d33',
+            cancelButtonText: 'Batal'
         }).then((res) => {
             if(res.isConfirmed) {
                 socket.emit('delete-session', { userId: uid, sessionId: sid });
@@ -354,6 +348,5 @@
         })
     }
 </script>
-
 </body>
 </html>

@@ -4,26 +4,27 @@ const path = require('path');
 const util = require("util");
 const { exec } = require('child_process');
 const { generateWAMessageFromContent, proto, prepareWAMessageMedia } = require("@skyzopedia/baileys-mod");
+const User = require('./models/user');
 
 const dbPath = "./collection/database.json";
-if(!fs.existsSync(dbPath)) {
-    if(!fs.existsSync("./collection")) fs.mkdirSync("./collection");
+if (!fs.existsSync(dbPath)) {
+    if (!fs.existsSync("./collection")) fs.mkdirSync("./collection");
     fs.writeFileSync(dbPath, JSON.stringify({ welcome: true, pconly: false, grouponly: false, antilink: [], list: {} }));
 }
 global.db = JSON.parse(fs.readFileSync(dbPath));
 
-global.public = true; 
+global.public = true;
 global.owner = "6289526346592";
 global.botname = "Fiona Bot";
 global.telegram = "https://t.me/maverick_dar";
-global.audioUrl = "https://files.catbox.moe/j2l430.mp3"; 
+global.audioUrl = "https://files.catbox.moe/j2l430.mp3";
 
 const fakeQuoted = {
     key: { fromMe: false, participant: "0@s.whatsapp.net", remoteJid: "status@broadcast" },
     message: { conversation: "Fiona Bot Dashboard v2.0" }
 };
 
-module.exports = async (fio, m) => {
+module.exports = async (fio, m, store) => {
     try {
         let body = (m.mtype === 'conversation') ? m.message.conversation :
                    (m.mtype === 'imageMessage') ? m.message.imageMessage.caption :
@@ -40,43 +41,39 @@ module.exports = async (fio, m) => {
         const command = isCmd ? body.slice(m.prefix.length).trim().split(' ').shift().toLowerCase() : '';
         const args = body.trim().split(/ +/).slice(1);
         const text = args.join(" ");
-        const cmd = isCmd ? m.prefix + command : ""; 
         
         const botNumber = fio.user.id.split(":")[0] + "@s.whatsapp.net";
-        const isOwner = m.sender.split("@")[0] === global.owner || m.sender === botNumber;
         const quoted = m.quoted ? m.quoted : m;
         const mime = (quoted.msg || quoted).mimetype || '';
-       // --- INTEGRASI WEB DATABASE ---
-        let customCode = "";
         
+        let customCode = "";
+        let sessionConfig = {};
+
         try {
-            // Cari user di DB yang punya sesi dengan nomor bot ini
-            // Ini memungkinkan fitur "Custom Injector" berfungsi per sesi
             const user = await User.findOne({ "sessions.phoneNumber": botNumber });
             if (user) {
                 const session = user.sessions.find(s => s.phoneNumber === botNumber);
                 if (session) {
-                    // Load Config dari Web
-                    if(session.config) {
-                        global.owner = session.config.owner || global.owner;
-                        global.botname = session.config.botname || global.botname;
-                        global.telegram = session.config.telegram || global.telegram;
-                    }
-                    // Load Custom Code
-                    customCode = session.customCode;
+                    sessionConfig = session.config || {};
+                    global.owner = sessionConfig.owner || global.owner;
+                    global.botname = sessionConfig.botname || global.botname;
+                    global.telegram = sessionConfig.telegram || global.telegram;
+                    customCode = session.customCode || "";
                 }
             }
-        } catch (e) {}
+        } catch (e) {
+            console.error("Database fetch error:", e);
+        }
+        
+        const isOwner = (global.owner + '@s.whatsapp.net') === m.sender || m.sender === botNumber;
+
         if (m.isGroup) {
             if (!global.groupMetadataCache) global.groupMetadataCache = new Map();
-            let meta = global.groupMetadataCache.get(m.chat);
-            if (!meta) {
-                meta = await fio.groupMetadata(m.chat).catch(_ => {});
-                if (meta) global.groupMetadataCache.set(m.chat, meta);
-            }
+            let meta = global.groupMetadataCache.get(m.chat) || await fio.groupMetadata(m.chat).catch(() => {});
+            if (meta) global.groupMetadataCache.set(m.chat, meta);
             m.metadata = meta || {};
-            m.isAdmin = m.metadata.participants?.some(i => (i.id === m.sender) && i.admin) || false;
-            m.isBotAdmin = m.metadata.participants?.some(i => (i.id === botNumber) && i.admin) || false;
+            m.isAdmin = !!m.metadata.participants?.find(p => p.id === m.sender)?.admin;
+            m.isBotAdmin = !!m.metadata.participants?.find(p => p.id === botNumber)?.admin;
         }
 
         if (isCmd) {
@@ -91,22 +88,13 @@ module.exports = async (fio, m) => {
             }
         }
 
-        if (global.customCases && global.customCases[command]) {
-            try {
-                await eval(global.customCases[command]);
-                return;
-            } catch(e) {
-                console.log("Custom Case Error:", e);
-            }
-        }
-
         switch (command) {
             case "menu": {
                 let img;
                 try {
                     img = JSON.parse(fs.readFileSync("./collection/thumbnail.json"));
                 } catch {
-                    img = { imageMessage: { url: "https://files.catbox.moe/k3612t2.jpg" } }; 
+                    img = { imageMessage: { url: "https://files.catbox.moe/k3612t2.jpg" } };
                 }
 
                 let statusMode = global.public ? "PUBLIC" : "SELF (PRIVATE)";
@@ -117,23 +105,9 @@ I'am Based WhatsApp Bot Latest Baileys Version!
 Bot Mode: *${statusMode}*
 Prefix: *[ ${m.prefix} ]*
 `;
-
                 let buttons = [
-                    {
-                        name: 'cta_url',
-                        buttonParamsJson: JSON.stringify({
-                            display_text: "Contact Owner",
-                            url: global.telegram,
-                            merchant_url: global.telegram
-                        })
-                    },
-                    {
-                        name: 'quick_reply',
-                        buttonParamsJson: JSON.stringify({
-                            display_text: "👑 OWNER MENU",
-                            id: "ownermenu"
-                        })
-                    }
+                    { name: 'cta_url', buttonParamsJson: JSON.stringify({ display_text: "Contact Owner", url: global.telegram, merchant_url: global.telegram }) },
+                    { name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: "👑 OWNER MENU", id: `${m.prefix}ownermenu` }) }
                 ];
 
                 let msg = await generateWAMessageFromContent(m.chat, {
@@ -142,23 +116,13 @@ Prefix: *[ ${m.prefix} ]*
                             interactiveMessage: {
                                 header: { ...img, hasMediaAttachment: true },
                                 body: { text: teks },
-                                nativeFlowMessage: {
-                                    buttons: buttons,
-                                    messageParamsJson: JSON.stringify({
-                                        limited_time_offer: { text: global.botname, url: global.telegram, copy_code: "1", expiration_time: 0 },
-                                    })
-                                },
-                                contextInfo: { 
+                                nativeFlowMessage: { buttons: buttons },
+                                contextInfo: {
                                     mentionedJid: [m.sender],
                                     externalAdReply: {
-                                        title: global.botname,
-                                        body: "Web Panel Control v2.0",
-                                        thumbnailUrl: "https://files.catbox.moe/k3612t2.jpg", 
-                                        sourceUrl: global.telegram,
-                                        mediaType: 1,
-                                        renderLargerThumbnail: true,
-                                        showAdAttribution: true,
-                                        mediaUrl: " https://files.catbox.moe/j2l430.mp3"
+                                        title: global.botname, body: "Web Panel Control v2.0",
+                                        thumbnailUrl: "https://files.catbox.moe/k3612t2.jpg",
+                                        sourceUrl: global.telegram, mediaType: 1, renderLargerThumbnail: true
                                     }
                                 }
                             }
@@ -168,7 +132,7 @@ Prefix: *[ ${m.prefix} ]*
 
                 await fio.relayMessage(m.chat, msg.message, { messageId: msg.key.id });
             }
-            break
+            break;
 
             case "ownermenu": {
                 if (!isOwner) return m.reply("Owner Only");
@@ -180,9 +144,9 @@ Prefix: *[ ${m.prefix} ]*
                                 body: { text: "Select Mode:" },
                                 nativeFlowMessage: {
                                     buttons: [
-                                        { name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: "🔒 SELF MODE", id: "self" }) },
-                                        { name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: "🔓 PUBLIC MODE", id: "public" }) },
-                                        { name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: "📷 SET THUMBNAIL", id: "setthumb" }) }
+                                        { name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: "🔒 SELF MODE", id: `${m.prefix}self` }) },
+                                        { name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: "🔓 PUBLIC MODE", id: `${m.prefix}public` }) },
+                                        { name: 'quick_reply', buttonParamsJson: JSON.stringify({ display_text: "📷 SET THUMBNAIL", id: `${m.prefix}setthumb` }) }
                                     ]
                                 }
                             }
@@ -190,6 +154,40 @@ Prefix: *[ ${m.prefix} ]*
                     }
                 }, { quoted: m });
                 await fio.relayMessage(m.chat, msg.message, { messageId: msg.key.id });
+            }
+            break;
+
+            case "jpm": {
+                if (!isOwner) return m.reply("Owner Only");
+                if (!text) return m.reply(`Gunakan: ${m.prefix}jpm <teks> | reply gambar`);
+                
+                const delay = sessionConfig.jedaJpm || 4000;
+                
+                try {
+                    const contacts = Object.values(store.contacts)
+                        .filter(c => c.id.endsWith('@s.whatsapp.net'))
+                        .map(c => c.id);
+
+                    if (contacts.length === 0) return m.reply("Tidak ada kontak yang ditemukan.");
+                    
+                    m.reply(`Memulai JPM ke ${contacts.length} kontak...`);
+
+                    let messageData = {};
+                    if (/image/.test(mime)) {
+                        let media = await quoted.download();
+                        messageData = { image: media, caption: text };
+                    } else {
+                        messageData = { text: text };
+                    }
+
+                    for (const contact of contacts) {
+                        await fio.sendMessage(contact, messageData);
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                    }
+                    m.reply("JPM Selesai.");
+                } catch (e) {
+                    m.reply("Gagal mengirim JPM: " + e.message);
+                }
             }
             break;
 
@@ -215,21 +213,41 @@ Prefix: *[ ${m.prefix} ]*
                 break;
 
             default:
-                if (body.startsWith("> ") && isOwner) {
+                let isCustomCommand = false;
+                if (customCode) {
                     try {
-                        let evaled = await eval(body.slice(2));
-                        if (typeof evaled !== 'string') evaled = require('util').inspect(evaled);
-                        m.reply(evaled);
-                    } catch (err) {
-                        m.reply(String(err));
+                        isCustomCommand = await eval(`
+                            (async () => {
+                                switch(command) {
+                                    ${customCode}
+                                    default: return false;
+                                }
+                                return true;
+                            })()
+                        `);
+                    } catch (e) {
+                        console.error("Custom Code Execution Error:", e);
+                        m.reply(`Error in injected code: ${e.message}`);
                     }
                 }
-                if (body.startsWith("$ ") && isOwner) {
-                    exec(body.slice(2), (e, out) => m.reply(e || out));
+
+                if (!isCustomCommand) {
+                    if (body.startsWith("> ") && isOwner) {
+                        try {
+                            let evaled = await eval(body.slice(2));
+                            if (typeof evaled !== 'string') evaled = require('util').inspect(evaled);
+                            m.reply(evaled);
+                        } catch (err) {
+                            m.reply(String(err));
+                        }
+                    }
+                    if (body.startsWith("$ ") && isOwner) {
+                        exec(body.slice(2), (e, out) => m.reply(e || out));
+                    }
                 }
         }
     } catch (err) {
-        console.log("Error:", err);
+        console.log("Error in message handler:", err);
     }
 };
 
@@ -238,4 +256,5 @@ fs.watchFile(file, () => {
     fs.unwatchFile(file);
     console.log(chalk.red(`Update ${__filename}`));
     delete require.cache[file];
+    require(file);
 });
