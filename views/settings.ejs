@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="id">
+<%- include('partials/header') %>
+
+<head>
+    <style>
+        /* CSS yang sama dengan Profile/Dashboard */
+        :root { --sidebar-width: 280px; --primary-color: #4e54c8; --secondary-bg: #f4f6f9; }
+        body { overflow-x: hidden; background-color: var(--secondary-bg); }
+        #wrapper { display: flex; width: 100%; height: 100vh; overflow: hidden; }
+        #sidebar-wrapper {
+            min-height: 100vh; width: var(--sidebar-width); margin-left: calc(var(--sidebar-width) * -1);
+            background: #ffffff; border-right: 1px solid #eaeaea; transition: margin 0.3s ease-in-out;
+            position: fixed; z-index: 1000; display: flex; flex-direction: column; box-shadow: 4px 0 15px rgba(0,0,0,0.05);
+        }
+        .sidebar-heading { padding: 1.5rem; font-size: 1.25rem; font-weight: bold; color: var(--primary-color); display: flex; justify-content: space-between; align-items: center; }
+        .list-group-item { border: none; padding: 1rem 1.5rem; font-weight: 500; color: #6c757d; transition: all 0.2s; border-left: 4px solid transparent; }
+        .list-group-item:hover, .list-group-item.active { color: var(--primary-color); background-color: #f8f9fa; border-left-color: var(--primary-color); }
+        .list-group-item.active { background-color: #eef2ff; }
+        .sidebar-footer { margin-top: auto; padding: 1.5rem; }
+        #page-content-wrapper { width: 100%; overflow-y: auto; transition: margin 0.3s ease-in-out; }
+        #wrapper.toggled #sidebar-wrapper { margin-left: 0; }
+        @media (min-width: 768px) {
+            #sidebar-wrapper { margin-left: 0; position: relative; }
+            #page-content-wrapper { min-width: 0; width: 100%; }
+            #wrapper.toggled #sidebar-wrapper { margin-left: calc(var(--sidebar-width) * -1); }
+        }
+        .sidebar-backdrop { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 900; }
+        #wrapper.toggled .sidebar-backdrop { display: block; }
+        @media (min-width: 768px) { #wrapper.toggled .sidebar-backdrop { display: none; } }
+    </style>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div class="sidebar-backdrop" id="backdrop"></div>
+        <div id="sidebar-wrapper">
+            <div class="sidebar-heading">
+                <span><i class="fas fa-robot me-2"></i>Fiona Panel</span>
+                <button class="btn btn-link text-danger d-md-none text-decoration-none" id="sidebar-close"><i class="fas fa-times fa-lg"></i></button>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="/dashboard" class="list-group-item list-group-item-action"><i class="fas fa-tachometer-alt me-3"></i>Dashboard</a>
+                <a href="/profile" class="list-group-item list-group-item-action"><i class="fas fa-user me-3"></i>Profile</a>
+                <a href="/settings" class="list-group-item list-group-item-action active"><i class="fas fa-cog me-3"></i>Settings</a>
+                <a href="https://t.me/maverick_dar" target="_blank" class="list-group-item list-group-item-action"><i class="fas fa-headset me-3"></i>Support</a>
+            </div>
+            <div class="sidebar-footer">
+                <a href="/logout" class="btn btn-outline-danger w-100 rounded-pill"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
+            </div>
+        </div>
+
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top px-4 py-3 shadow-sm">
+                <div class="d-flex align-items-center w-100">
+                    <button class="btn btn-light border shadow-sm me-3" id="menu-toggle"><i class="fas fa-bars"></i></button>
+                    <h5 class="mb-0 fw-bold text-secondary d-none d-md-block">General Settings</h5>
+                    <div class="ms-auto d-flex align-items-center">
+                        <div class="text-end me-3 d-none d-sm-block">
+                            <span class="d-block fw-bold text-dark"><%= user.username %></span>
+                        </div>
+                        <img src="<%= user.profilePic %>" class="rounded-circle border" width="45" height="45" style="object-fit: cover;">
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid p-4">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        
+                        <!-- Alert Messages -->
+                        <script>
+                            const params = new URLSearchParams(window.location.search);
+                            if(params.has('error')) document.write(`<div class="alert alert-danger rounded-3">${params.get('error')}</div>`);
+                            if(params.has('success')) document.write(`<div class="alert alert-success rounded-3">${params.get('success')}</div>`);
+                        </script>
+
+                        <h4 class="fw-bold mb-4 text-dark">Preferensi Akun</h4>
+                        
+                        <!-- Security Card -->
+                        <div class="card border-0 shadow-sm rounded-4 mb-4">
+                            <div class="card-body p-4">
+                                <h5 class="fw-bold mb-4 text-primary"><i class="fas fa-shield-alt me-2"></i>Keamanan</h5>
+                                
+                                <!-- CHANGE PASSWORD -->
+                                <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+                                    <div>
+                                        <p class="mb-0 fw-bold">Ganti Password</p>
+                                        <small class="text-muted">Disarankan mengganti password setiap 3 bulan.</small>
+                                    </div>
+                                    <button class="btn btn-outline-dark rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#changePassModal">Ubah</button>
+                                </div>
+
+                                <!-- 2FA -->
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="mb-0 fw-bold">Verifikasi 2 Langkah (2FA)</p>
+                                        <small class="text-muted">Amankan akun dengan Google Authenticator.</small>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="switch2fa" style="width: 3em; height: 1.5em;" <%= user.twoFactorEnabled ? 'checked' : '' %>>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Danger Zone -->
+                        <div class="card border-0 shadow-sm rounded-4 bg-danger bg-opacity-10">
+                            <div class="card-body p-4">
+                                <h5 class="fw-bold text-danger mb-3">Zona Berbahaya</h5>
+                                <p class="mb-3 text-dark">Menghapus akun bersifat permanen. Semua bot dan sesi akan dihentikan seketika.</p>
+                                <button class="btn btn-danger rounded-pill px-4 shadow-sm" onclick="alert('Fitur ini belum aktif demi keamanan.')">Hapus Akun Permanen</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL GANTI PASSWORD -->
+    <div class="modal fade" id="changePassModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">Ubah Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="/settings/change-password" method="POST">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Password Saat Ini</label>
+                            <input type="password" name="currentPassword" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Password Baru</label>
+                            <input type="password" name="newPassword" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Konfirmasi Password Baru</label>
+                            <input type="password" name="confirmPassword" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary rounded-pill px-4">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SETUP 2FA -->
+    <div class="modal fade" id="setup2faModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">Setup Authenticator</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="cancel2fa()"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p class="text-muted small mb-3">Scan QR Code ini menggunakan aplikasi <b>Google Authenticator</b> atau <b>Authy</b>.</p>
+                    <div class="bg-light p-3 d-inline-block rounded border mb-3">
+                        <img id="qrCodeImg" src="" alt="QR Code" width="200">
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" id="verifyToken" class="form-control text-center fw-bold fs-5" placeholder="Masukkan 6 digit kode" maxlength="6">
+                        <button class="btn btn-success" onclick="verify2fa()">Verifikasi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<%- include('partials/footer') %>
+
+<script>
+    // Logic Nav Sidebar (Sama)
+    const wrapper = document.getElementById("wrapper");
+    const menuToggle = document.getElementById("menu-toggle");
+    const sidebarClose = document.getElementById("sidebar-close");
+    const backdrop = document.getElementById("backdrop");
+    const sidebarLinks = document.querySelectorAll('.list-group-item');
+
+    function toggleSidebar() { wrapper.classList.toggle("toggled"); }
+    function closeSidebar() { if (window.innerWidth < 768) wrapper.classList.remove("toggled"); }
+
+    if(menuToggle) menuToggle.addEventListener("click", (e) => { e.preventDefault(); toggleSidebar(); });
+    if(sidebarClose) sidebarClose.addEventListener("click", (e) => { e.preventDefault(); closeSidebar(); });
+    if(backdrop) backdrop.addEventListener("click", closeSidebar);
+    sidebarLinks.forEach(link => link.addEventListener('click', closeSidebar));
+
+    // --- LOGIC 2FA SWITCH ---
+    const switch2fa = document.getElementById('switch2fa');
+    const modal2fa = new bootstrap.Modal(document.getElementById('setup2faModal'));
+
+    switch2fa.addEventListener('change', function() {
+        if (this.checked) {
+            // Enable 2FA -> Generate QR
+            fetch('/settings/2fa/generate', { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('qrCodeImg').src = data.qrCode;
+                    modal2fa.show();
+                });
+        } else {
+            // Disable 2FA
+            if(confirm('Yakin ingin mematikan 2FA? Akun Anda menjadi kurang aman.')) {
+                fetch('/settings/2fa/disable', { method: 'POST' })
+                .then(() => location.reload());
+            } else {
+                this.checked = true; // Cancel uncheck
+            }
+        }
+    });
+
+    function verify2fa() {
+        const token = document.getElementById('verifyToken').value;
+        fetch('/settings/2fa/enable', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                Swal.fire('Sukses', '2FA Berhasil Diaktifkan!', 'success').then(() => location.reload());
+            } else {
+                Swal.fire('Gagal', 'Kode OTP Salah!', 'error');
+            }
+        });
+    }
+
+    function cancel2fa() {
+        switch2fa.checked = false; // Reset switch jika batal setup
+    }
+</script>
+</body>
+</html>

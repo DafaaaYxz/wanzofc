@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIONA BOT - WEB PANEL</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hover.css/css/hover-min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tippy.js@6.3.7/dist/tippy.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magic/1.1.0/magic.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+
+    <style>
+        :root {
+            --primary: #4e54c8;
+            --secondary: #8f94fb;
+            --bg-light: #f8f9fa;
+            --text-dark: #2d3436;
+            --text-gray: #636e72;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--white);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: radial-gradient(circle at top right, rgba(143, 148, 251, 0.1) 0%, rgba(255,255,255,0) 50%);
+            padding-top: 80px;
+        }
+
+        .hero-blob {
+            position: absolute;
+            background: var(--primary);
+            filter: blur(80px);
+            opacity: 0.1;
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .feature-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.03);
+            height: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(78, 84, 200, 0.15);
+            border-color: var(--primary);
+        }
+
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            background: rgba(78, 84, 200, 0.1);
+            color: var(--primary);
+        }
+
+        .btn-custom {
+            background: var(--primary);
+            color: white;
+            border-radius: 50px;
+            padding: 12px 35px;
+            font-weight: 600;
+            transition: 0.3s;
+            border: none;
+            box-shadow: 0 5px 15px rgba(78, 84, 200, 0.3);
+        }
+
+        .btn-custom:hover {
+            transform: scale(1.05);
+            background: var(--secondary);
+            color: white;
+        }
+
+        .mockup-container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .mockup-img {
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            border: 8px solid white;
+            transform: perspective(1000px) rotateY(-10deg) rotateX(5deg);
+            transition: transform 0.5s;
+        }
+
+        .mockup-img:hover {
+            transform: perspective(1000px) rotateY(0) rotateX(0);
+        }
+
+        .code-window {
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .scroll-tech {
+            background: var(--bg-light);
+            padding: 2rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .tech-item {
+            display: inline-block;
+            margin: 0 2rem;
+            font-weight: 700;
+            color: #bdc3c7;
+            text-transform: uppercase;
+        }
+
+        .pricing-card {
+            border-radius: 20px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            border: 1px solid #f1f1f1;
+        }
+
+        .pricing-card:hover {
+            transform: scale(1.03);
+            border-color: var(--primary);
+        }
+
+        .section-title {
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .lowercase-text {
+            text-transform: lowercase;
+            color: var(--text-gray);
+            font-weight: 400;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-dark text-uppercase" href="#">
+                <i class="fas fa-robot me-2 text-primary"></i>FIONA
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="fas fa-bars"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center gap-3">
+                    <li class="nav-item"><a class="nav-link lowercase-text fw-bold text-dark" href="#features">fitur</a></li>
+                    <li class="nav-item"><a class="nav-link lowercase-text fw-bold text-dark" href="#pricing">harga</a></li>
+                    <li class="nav-item"><a class="btn btn-outline-primary rounded-pill px-4 lowercase-text fw-bold" href="/login">masuk</a></li>
+                    <li class="nav-item"><a class="btn btn-custom lowercase-text" href="/register">daftar sekarang</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="hero-blob" style="width: 500px; height: 500px; top: -100px; right: -100px;"></div>
+        <div class="hero-blob" style="width: 300px; height: 300px; bottom: 50px; left: -50px; background: var(--secondary);"></div>
+
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
+                    <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill text-uppercase fw-bold mb-3">
+                        <i class="fas fa-bolt me-1"></i> panel bot v2.0 stabil
+                    </span>
+                    <h1 class="display-3 fw-bold text-dark mb-3 text-uppercase" style="line-height: 1.1;">
+                        kelola bot whatsapp <br>
+                        <span class="text-gradient" id="typed-text"></span>
+                    </h1>
+                    <p class="lead lowercase-text mb-5">
+                        solusi bot whatsapp berbasis cloud tanpa scan qr. fitur lengkap mulai dari auto reply, broadcast, hingga bug tools canggih. aktif 24 jam nonstop.
+                    </p>
+                    <div class="d-flex gap-3">
+                        <a href="/register" class="btn btn-custom hvr-wobble-horizontal text-uppercase">
+                            mulai gratis
+                        </a>
+                        <a href="#demo" class="btn btn-light rounded-pill px-4 py-2 shadow-sm text-uppercase d-flex align-items-center gap-2">
+                            <i class="fas fa-play text-primary"></i> lihat demo
+                        </a>
+                    </div>
+                    <div class="mt-4 d-flex align-items-center gap-3">
+                        <div class="d-flex">
+                            <img src="https://randomuser.me/api/portraits/men/1.jpg" class="rounded-circle border border-2 border-white" width="40">
+                            <img src="https://randomuser.me/api/portraits/women/2.jpg" class="rounded-circle border border-2 border-white ms-n3" width="40" style="margin-left: -15px;">
+                            <img src="https://randomuser.me/api/portraits/men/3.jpg" class="rounded-circle border border-2 border-white ms-n3" width="40" style="margin-left: -15px;">
+                        </div>
+                        <p class="mb-0 small lowercase-text fw-bold">bergabung dengan 1,000+ pengguna aktif</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center" data-aos="zoom-in" data-tilt>
+                    <div class="mockup-container">
+                        <img src="https://files.catbox.moe/r30gb3.jpg?w=1380" alt="Dashboard Preview" class="img-fluid mockup-img w-100">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="scroll-tech">
+        <div class="d-flex" id="tech-marquee"></div>
+    </div>
+
+    <section id="features" class="py-5 bg-white">
+        <div class="container py-5">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h6 class="section-title">fitur unggulan</h6>
+                <h2 class="fw-bold text-dark text-uppercase display-6">teknologi bot mutakhir</h2>
+                <p class="lowercase-text">semua yang anda butuhkan untuk otomatisasi whatsapp</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-card hvr-float">
+                        <div class="icon-box"><i class="fas fa-link"></i></div>
+                        <h5 class="fw-bold text-uppercase mb-3">pairing code md</h5>
+                        <p class="lowercase-text mb-0">koneksi mudah tanpa kamera hp kedua. cukup masukkan nomor, dapatkan kode, dan tempel di whatsapp anda.</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-card hvr-float">
+                        <div class="icon-box"><i class="fas fa-bug"></i></div>
+                        <h5 class="fw-bold text-uppercase mb-3">menu bug & war</h5>
+                        <p class="lowercase-text mb-0">akses eksklusif ke fitur bug seperti crash, lag, catalog bug, dan bulldozer attack untuk pengujian keamanan.</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-card hvr-float">
+                        <div class="icon-box"><i class="fas fa-server"></i></div>
+                        <h5 class="fw-bold text-uppercase mb-3">cloud server 24/7</h5>
+                        <p class="lowercase-text mb-0">bot berjalan di server kami. hp mati, kuota habis, bot tetap on melayani pesan masuk.</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-card hvr-float">
+                        <div class="icon-box"><i class="fas fa-code"></i></div>
+                        <h5 class="fw-bold text-uppercase mb-3">custom injector</h5>
+                        <p class="lowercase-text mb-0">fitur revolusioner. tambahkan script custom anda sendiri ke dalam sesi bot langsung dari dashboard.</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-card hvr-float">
+                        <div class="icon-box"><i class="fas fa-wallet"></i></div>
+                        <h5 class="fw-bold text-uppercase mb-3">donasi otomatis</h5>
+                        <p class="lowercase-text mb-0">sistem pembayaran qris terintegrasi. upgrade akun atau donasi saldo diproses secara instan.</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="600">
+                    <div class="feature-card hvr-float">
+                        <div class="icon-box"><i class="fas fa-shield-alt"></i></div>
+                        <h5 class="fw-bold text-uppercase mb-3">anti banned</h5>
+                        <p class="lowercase-text mb-0">dilengkapi algoritma pintar untuk meminimalisir resiko banned saat melakukan broadcast massal.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-light overflow-hidden">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <h6 class="section-title">segera hadir</h6>
+                    <h2 class="fw-bold text-dark text-uppercase mb-4">custom script injector</h2>
+                    <p class="lowercase-text lead mb-4">
+                        anda developer? atau ingin fitur unik? nantinya anda bisa menyuntikkan kode javascript langsung ke sesi bot anda tanpa perlu restart server utama.
+                    </p>
+                    <div class="d-flex align-items-start gap-3 mb-3">
+                        <i class="fas fa-check-circle text-success mt-1"></i>
+                        <div>
+                            <h6 class="fw-bold text-uppercase mb-0">tambah case sendiri</h6>
+                            <p class="lowercase-text small text-muted">contoh: buat fitur download tiktok khusus bot anda.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start gap-3">
+                        <i class="fas fa-check-circle text-success mt-1"></i>
+                        <div>
+                            <h6 class="fw-bold text-uppercase mb-0">isolasi aman</h6>
+                            <p class="lowercase-text small text-muted">kode anda berjalan di lingkungan aman per sesi.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mt-5 mt-lg-0" data-aos="fade-left">
+                    <div class="code-window">
+                        <div class="d-flex gap-2 mb-3">
+                            <div class="rounded-circle bg-danger" style="width: 12px; height: 12px;"></div>
+                            <div class="rounded-circle bg-warning" style="width: 12px; height: 12px;"></div>
+                            <div class="rounded-circle bg-success" style="width: 12px; height: 12px;"></div>
+                        </div>
+                        <pre><code class="language-javascript">
+// Contoh Injector (Coming Soon)
+module.exports = async (fiona, m) => {
+    switch(command) {
+        case 'myfeature':
+            await fiona.sendMessage(m.chat, { 
+                text: 'Halo! Ini fitur custom saya' 
+            });
+            break;
+    }
+}
+                        </code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="py-5 bg-white">
+        <div class="container py-5">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h6 class="section-title">paket berlangganan</h6>
+                <h2 class="fw-bold text-dark text-uppercase display-6">pilih sesuai kebutuhan</h2>
+                <p class="lowercase-text">mulai gratis, upgrade untuk kekuatan penuh</p>
+            </div>
+
+            <div class="row justify-content-center g-4 align-items-center">
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="pricing-card p-4 text-center">
+                        <h4 class="fw-bold text-uppercase mb-3">starter</h4>
+                        <h2 class="display-4 fw-bold text-dark mb-0">rp 0</h2>
+                        <span class="text-muted lowercase-text">selamanya</span>
+                        <hr class="my-4">
+                        <ul class="list-unstyled text-start mx-auto" style="max-width: 200px;">
+                            <li class="mb-3 lowercase-text"><i class="fas fa-check text-primary me-2"></i> 2 sesi bot</li>
+                            <li class="mb-3 lowercase-text"><i class="fas fa-check text-primary me-2"></i> fitur dasar</li>
+                            <li class="mb-3 lowercase-text"><i class="fas fa-check text-primary me-2"></i> mode publik</li>
+                            <li class="mb-3 lowercase-text text-muted text-decoration-line-through"><i class="fas fa-times me-2"></i> menu bug</li>
+                        </ul>
+                        <a href="/register" class="btn btn-outline-primary rounded-pill w-100 text-uppercase fw-bold">daftar gratis</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4" data-aos="zoom-in">
+                    <div class="pricing-card p-5 text-center bg-gradient-primary text-white position-relative" style="transform: scale(1.05); z-index: 2;">
+                        <div class="position-absolute top-0 start-50 translate-middle badge bg-warning text-dark px-3 py-2 text-uppercase fw-bold shadow">paling laris</div>
+                        <h4 class="fw-bold text-uppercase mb-3">premium</h4>
+                        <h2 class="display-4 fw-bold mb-0">rp 5rb</h2>
+                        <span class="text-white-50 lowercase-text">sekali bayar</span>
+                        <hr class="my-4 border-white">
+                        <ul class="list-unstyled text-start mx-auto" style="max-width: 200px;">
+                            <li class="mb-3 lowercase-text"><i class="fas fa-check-circle me-2"></i> 10 sesi bot</li>
+                            <li class="mb-3 lowercase-text"><i class="fas fa-check-circle me-2"></i> buka menu bug</li>
+                            <li class="mb-3 lowercase-text"><i class="fas fa-check-circle me-2"></i> prioritas server</li>
+                            <li class="mb-3 lowercase-text"><i class="fas fa-check-circle me-2"></i> akses fitur baru</li>
+                        </ul>
+                        <form action="/payment/upgrade" method="POST">
+                            <button class="btn btn-light rounded-pill w-100 text-uppercase fw-bold text-primary shadow">upgrade sekarang</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-light">
+        <div class="container text-center">
+            <div class="row justify-content-center">
+                <div class="col-lg-8" data-aos="fade-up">
+                    <div class="card border-0 shadow-sm p-5 rounded-4 text-center">
+                        <i class="fas fa-heart text-danger fa-3x mb-3 animate__animated animate__heartBeat animate__infinite"></i>
+                        <h3 class="fw-bold text-uppercase text-dark">dukung pengembangan</h3>
+                        <p class="lowercase-text text-muted mb-4">
+                            aplikasi ini dikembangkan dengan cinta. anda bisa memberikan dukungan donasi berapapun untuk membantu biaya server.
+                        </p>
+                        <button class="btn btn-warning text-white rounded-pill px-5 py-3 fw-bold text-uppercase shadow-sm" data-bs-toggle="modal" data-bs-target="#donateModal">
+                            <i class="fas fa-coffee me-2"></i> traktir kopi
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="donateModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-0 bg-warning bg-opacity-10">
+                    <h5 class="modal-title fw-bold text-uppercase text-dark">donasi sukarela</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="/payment/donate" method="POST">
+                    <div class="modal-body p-4">
+                        <div class="alert alert-info border-0 rounded-3 small lowercase-text">
+                            <i class="fas fa-info-circle me-2"></i>biaya admin rp 400 per transaksi.
+                        </div>
+                        <label class="fw-bold small text-muted text-uppercase mb-2">nominal (rp)</label>
+                        <input type="number" name="amount" class="form-control form-control-lg bg-light border-0 fw-bold" placeholder="10000" min="1000">
+                    </div>
+                    <div class="modal-footer border-0 pt-0 px-4 pb-4">
+                        <button type="submit" class="btn btn-primary w-100 rounded-pill text-uppercase fw-bold">lanjut pembayaran</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="py-5 bg-white border-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h5 class="fw-bold text-uppercase text-dark mb-3"><i class="fas fa-robot me-2 text-primary"></i>fiona</h5>
+                    <p class="lowercase-text text-muted small">
+                        platform manajemen bot whatsapp terbaik dengan fitur pairing code dan bug tools terlengkap di indonesia.
+                    </p>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <h6 class="fw-bold text-uppercase text-dark mb-3">navigasi</h6>
+                    <ul class="list-unstyled small lowercase-text">
+                        <li><a href="#" class="text-muted text-decoration-none">beranda</a></li>
+                        <li><a href="#features" class="text-muted text-decoration-none">fitur</a></li>
+                        <li><a href="#pricing" class="text-muted text-decoration-none">harga</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <h6 class="fw-bold text-uppercase text-dark mb-3">legal</h6>
+                    <ul class="list-unstyled small lowercase-text">
+                        <li><a href="#" class="text-muted text-decoration-none">privasi</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">syarat</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h6 class="fw-bold text-uppercase text-dark mb-3">newsletter</h6>
+                    <p class="small lowercase-text text-muted">dapatkan info update terbaru.</p>
+                    <div class="input-group">
+                        <input type="email" class="form-control rounded-pill rounded-end border-0 bg-light" placeholder="email anda">
+                        <button class="btn btn-primary rounded-pill rounded-start px-4"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center small lowercase-text text-muted">
+                &copy;  fiona, made by wanzofc
+            </div>
+        </div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tilt.js/1.2.1/tilt.jquery.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.3.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0.0/jquery.counterup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/scrollmagic/2.0.8/ScrollMagic.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rellax/1.12.1/rellax.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parallax/3.1.0/parallax.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+
+    <script>
+        AOS.init({ duration: 800, once: true });
+        
+        var typed = new Typed('#typed-text', {
+            strings: ['SECARA OTOMATIS', 'TANPA BANNED', 'DENGAN MUDAH', 'JARAK JAUH'],
+            typeSpeed: 50,
+            backSpeed: 30,
+            loop: true
+        });
+
+        gsap.from(".hero-blob", { duration: 3, opacity: 0, scale: 0.5, stagger: 0.5, ease: "power2.out" });
+        gsap.from(".mockup-img", { duration: 1.5, y: 100, opacity: 0, delay: 0.5, ease: "power3.out" });
+
+        $('.mockup-container').tilt({ max: 15, speed: 400, glare: true, "max-glare": 0.2 });
+        $('.feature-card').tilt({ max: 5, speed: 300 });
+
+        tippy('[data-tippy-content]');
+
+        const techStack = [
+            "NODE.JS", "REACT", "BOOTSTRAP", "MONGODB", "SOCKET.IO", "GSAP", "BAILEYS MD", "AXIOS", "EJS", "EXPRESS",
+            "JQUERY", "SWEETALERT", "AOS", "THREE.JS", "ANIME.JS", "CHART.JS", "LEAFLET", "PRISM", "LODASH", "MOMENT"
+        ];
+        
+        const marquee = document.getElementById('tech-marquee');
+        const content = techStack.map(t => `<span class="tech-item"><i class="fas fa-circle text-primary me-2" style="font-size: 6px;"></i>${t}</span>`).join('');
+        marquee.innerHTML = content + content + content + content;
+
+        gsap.to("#tech-marquee", { xPercent: -50, ease: "none", duration: 30, repeat: -1 });
+    </script>
+</body>
+</html>

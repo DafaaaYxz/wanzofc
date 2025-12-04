@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<%- include('partials/header') %>
+<body class="bg-light d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5 col-lg-4">
+                <!-- Card Register -->
+                <div class="card border-0 shadow-lg rounded-4 p-4 bg-white">
+                    <div class="text-center mb-4">
+                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex p-3 mb-3">
+                            <i class="fas fa-user-plus fa-2x"></i>
+                        </div>
+                        <h4 class="fw-bold text-dark">Buat Akun Baru</h4>
+                        <p class="text-muted small">Mulai kelola bot WhatsApp Anda hari ini.</p>
+                    </div>
+
+                    <form action="/register" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-muted">Username</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="fas fa-user text-muted"></i></span>
+                                <input type="text" name="username" class="form-control bg-light border-start-0" placeholder="Username Anda" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-muted">Email Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="fas fa-envelope text-muted"></i></span>
+                                <input type="email" name="email" class="form-control bg-light border-start-0" placeholder="email@contoh.com" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold small text-muted">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="fas fa-lock text-muted"></i></span>
+                                <input type="password" name="password" class="form-control bg-light border-start-0" placeholder="••••••••" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 rounded-pill fw-bold py-2 shadow-sm">
+                            Daftar Sekarang <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-4 pt-3 border-top">
+                        <p class="small text-muted mb-0">Sudah punya akun? <a href="/login" class="text-primary fw-bold text-decoration-none">Login Disini</a></p>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-3">
+                    <a href="/" class="text-muted small text-decoration-none"><i class="fas fa-home"></i> Kembali ke Beranda</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<%- include('partials/footer') %>
+</body>
+</html>

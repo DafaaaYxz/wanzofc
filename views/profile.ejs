@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<%- include('partials/header') %>
+
+<head>
+    <style>
+        :root {
+            --sidebar-width: 280px;
+            --primary-color: #4e54c8;
+            --secondary-bg: #f4f6f9;
+        }
+        body {
+            overflow-x: hidden;
+            background-color: var(--secondary-bg);
+        }
+        #wrapper {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #sidebar-wrapper {
+            min-height: 100vh;
+            width: var(--sidebar-width);
+            margin-left: calc(var(--sidebar-width) * -1);
+            background: #ffffff;
+            border-right: 1px solid #eaeaea;
+            transition: margin 0.3s ease-in-out;
+            position: fixed;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.05);
+        }
+        .sidebar-heading {
+            padding: 1.5rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .list-group-item {
+            border: none;
+            padding: 1rem 1.5rem;
+            font-weight: 500;
+            color: #6c757d;
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+        }
+        .list-group-item:hover, .list-group-item.active {
+            color: var(--primary-color);
+            background-color: #f8f9fa;
+            border-left-color: var(--primary-color);
+        }
+        .list-group-item.active {
+            background-color: #eef2ff;
+        }
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 1.5rem;
+        }
+        #page-content-wrapper {
+            width: 100%;
+            overflow-y: auto;
+            transition: margin 0.3s ease-in-out;
+        }
+        #wrapper.toggled #sidebar-wrapper {
+            margin-left: 0;
+        }
+        @media (min-width: 768px) {
+            #sidebar-wrapper {
+                margin-left: 0;
+                position: relative;
+            }
+            #page-content-wrapper {
+                min-width: 0;
+                width: 100%;
+            }
+            #wrapper.toggled #sidebar-wrapper {
+                margin-left: calc(var(--sidebar-width) * -1);
+            }
+        }
+        .sidebar-backdrop {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 900;
+        }
+        #wrapper.toggled .sidebar-backdrop {
+            display: block;
+        }
+        @media (min-width: 768px) {
+            #wrapper.toggled .sidebar-backdrop { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div class="sidebar-backdrop" id="backdrop"></div>
+        <div id="sidebar-wrapper">
+            <div class="sidebar-heading">
+                <span><i class="fas fa-robot me-2"></i>Fiona Panel</span>
+                <button class="btn btn-link text-danger d-md-none text-decoration-none" id="sidebar-close">
+                    <i class="fas fa-times fa-lg"></i>
+                </button>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="/dashboard" class="list-group-item list-group-item-action">
+                    <i class="fas fa-tachometer-alt me-3"></i>Dashboard
+                </a>
+                <a href="/profile" class="list-group-item list-group-item-action active">
+                    <i class="fas fa-user me-3"></i>Profile
+                </a>
+                <a href="/settings" class="list-group-item list-group-item-action">
+                    <i class="fas fa-cog me-3"></i>Settings
+                </a>
+                <a href="https://t.me/maverick_dar" target="_blank" class="list-group-item list-group-item-action">
+                    <i class="fas fa-headset me-3"></i>Support
+                </a>
+            </div>
+            <div class="sidebar-footer">
+                <a href="/logout" class="btn btn-outline-danger w-100 rounded-pill">
+                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                </a>
+            </div>
+        </div>
+
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top px-4 py-3 shadow-sm">
+                <div class="d-flex align-items-center w-100">
+                    <button class="btn btn-light border shadow-sm me-3" id="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h5 class="mb-0 fw-bold text-secondary d-none d-md-block">Profile Settings</h5>
+                    <div class="ms-auto d-flex align-items-center">
+                        <div class="text-end me-3 d-none d-sm-block">
+                            <span class="d-block fw-bold text-dark"><%= user.username %></span>
+                        </div>
+                        <img src="<%= user.profilePic %>" class="rounded-circle border" width="45" height="45" style="object-fit: cover;">
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid p-4">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card border-0 shadow-sm rounded-4">
+                            <div class="card-body p-5">
+                                <h4 class="fw-bold mb-4 text-dark">Edit Informasi Akun</h4>
+                                <div class="text-center mb-5">
+                                    <div class="position-relative d-inline-block">
+                                        <img src="<%= user.profilePic %>" class="rounded-circle shadow-sm border border-3 border-white" width="120" height="120" style="object-fit: cover;">
+                                    </div>
+                                </div>
+                                <form action="/profile/update" method="POST">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-bold small text-muted">Username</label>
+                                            <input type="text" name="username" class="form-control bg-light" value="<%= user.username %>">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-bold small text-muted">Email Address</label>
+                                            <input type="email" name="email" class="form-control bg-light" value="<%= user.email %>">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label fw-bold small text-muted">URL Foto Profil</label>
+                                            <input type="text" name="profilePic" class="form-control bg-light" value="<%= user.profilePic %>">
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 text-end">
+                                        <button type="submit" class="btn btn-primary rounded-pill px-5 shadow-sm">Simpan Perubahan</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<%- include('partials/footer') %>
+
+<script>
+    const wrapper = document.getElementById("wrapper");
+    const menuToggle = document.getElementById("menu-toggle");
+    const sidebarClose = document.getElementById("sidebar-close");
+    const backdrop = document.getElementById("backdrop");
+    const sidebarLinks = document.querySelectorAll('.list-group-item');
+
+    function toggleSidebar() { wrapper.classList.toggle("toggled"); }
+    function closeSidebar() { if (window.innerWidth < 768) wrapper.classList.remove("toggled"); }
+
+    if(menuToggle) menuToggle.addEventListener("click", (e) => { e.preventDefault(); toggleSidebar(); });
+    if(sidebarClose) sidebarClose.addEventListener("click", (e) => { e.preventDefault(); closeSidebar(); });
+    if(backdrop) backdrop.addEventListener("click", closeSidebar);
+    sidebarLinks.forEach(link => link.addEventListener('click', closeSidebar));
+</script>
+</body>
+</html>

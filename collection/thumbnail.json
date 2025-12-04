@@ -1,0 +1,43 @@
+{
+  "imageMessage": {
+    "url": "https://mmg.whatsapp.net/o1/v/t24/f2/m233/AQNNk4MpM0mKjVol_fDRv8RleoNyQLlqM3Xok1LC6_4VYqOdPhumG2z2MxbqhusI2D7V6aBj8qMZ1UVE_WLBWVit1Hc9ogV-hSu-qFKfxQ?ccb=9-4&oh=01_Q5Aa3AF-Xxwq_ErdeEyvk9u9ry79PSI93uxmDkTTxP3hz9PxbA&oe=69497737&_nc_sid=e6ed6c&mms3=true",
+    "mimetype": "image/jpeg",
+    "fileSha256": "2oKNNIx1vdZ1mZUuhQCj02nKLxB66jWvq69F2T6Io+o=",
+    "fileLength": "47518",
+    "height": 509,
+    "width": 695,
+    "mediaKey": "7yZ95iD+vGngMNPzlPA8YvLv1tXYYGttB1plqfmryio=",
+    "fileEncSha256": "58TD7Qq7bZIwrZfLQIVodX0i4qjiZgkTw/dU7d9VFhA=",
+    "directPath": "/o1/v/t24/f2/m233/AQNNk4MpM0mKjVol_fDRv8RleoNyQLlqM3Xok1LC6_4VYqOdPhumG2z2MxbqhusI2D7V6aBj8qMZ1UVE_WLBWVit1Hc9ogV-hSu-qFKfxQ?ccb=9-4&oh=01_Q5Aa3AF-Xxwq_ErdeEyvk9u9ry79PSI93uxmDkTTxP3hz9PxbA&oe=69497737&_nc_sid=e6ed6c",
+    "mediaKeyTimestamp": "1763840038",
+    "jpegThumbnail": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2MBERISGBUYLxoaL2NCOEJjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY//AABEIABcAIAMBEQACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8/T19vf4+fr/2gAMAwEAAhEDEQA/AM3xNHE9jbTwhVQHaqhccEZH06dKlFMwLSEzziMMBnu3ShuyHFXdjpYLSTY8InQS4HAztH+ePzrG50JdDEW1+ef94PMWUpjoCOec/hW19Dme4651GQ2psgUaEYOcHOepH4Hj8KdhXK81tcWEsZlXG5Q6kHORS0aK1iy21yUja4VmMjjC8dOPcf1qEuho5WVynbyhGAJwPU1o1cxT7lnTtOOoXThm2xhjkjrSlKxcY3Ny7hube3kERAjhX1ySCecZ6f8A1qzjqzWTstCO9ks7jQS0ACpENn3Oc8fl196dmpGd7xuczjavy/nW2xluf//Z",
+    "annotations": [
+      {
+        "polygonVertices": [
+          {
+            "x": 60.71664810180664,
+            "y": -36.39784622192383
+          },
+          {
+            "x": -16.710189819335938,
+            "y": 49.263675689697266
+          },
+          {
+            "x": -56.585853576660156,
+            "y": 37.85963439941406
+          },
+          {
+            "x": 20.840980529785156,
+            "y": -47.80188751220703
+          }
+        ],
+        "newsletter": {
+          "newsletterJid": "120363420249672073@newsletter",
+          "serverMessageId": 0,
+          "newsletterName": "kyuu ilysm",
+          "contentType": "UPDATE"
+        }
+      }
+    ]
+  }
+}
